@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * A minimal module for testing and prototyping.
+ *
+ * @see https://github.com/danieljrmay/test_module
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function test_module_menu() {
+  $items['test_module'] = array(
+    'title' => 'Test Module',
+    'description' => 'A minimal page to prove that test_module is working.',
+    'page callback' => 'test_module_page',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Test Module page callback.
+ */
+function test_module_page() {
+  return array(
+    '#markup' => t('<p>The test_module is working.</p>'),
+  );
+}

@@ -1,0 +1,11 @@
+[TestModuleDisabled]
+name = Disabled
+description = Tests with module disabled.
+group = Test Module
+file = test_module.test
+
+[TestModuleEnabled]
+name = Enabled
+description = Tests with module enabled.
+group = Test Module
+file = test_module.test

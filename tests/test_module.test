@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Tests for test_module.module.
+ */
+
+/**
+ * Base test case class.
+ */
+class TestModuleBaseWebTestCase extends BackdropWebTestCase {
+  const PAGE_PATH = 'test_module';
+
+  protected $authenticatedUser;
+  protected $administratorUser;
+}
+
+/**
+ * Test case with the test_module module disabled.
+ */
+class TestModuleDisabled extends TestModuleBaseWebTestCase {
+  /**
+   * Enable modules and create users with specific permissions.
+   */
+  public function setUp() {
+    // Add modules not enabled in a standard backdrop install.
+    parent::setUp();
+
+    // Create users.
+    $this->authenticatedUser = $this->backdropCreateUser(array());
+    $this->administratorUser = $this->backdropCreateUser(array('access administration pages'));
+  }
+
+  /**
+   * Test page access for various users.
+   */
+  public function testPageAccess() {
+    // Anonymous user page access.
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(404);
+
+    // Authenticated user page access.
+    $this->backdropLogin($this->authenticatedUser);
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(404);
+    $this->backdropLogout();
+
+    // Administrator user page access.
+    $this->backdropLogin($this->administratorUser);
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(404);
+    $this->backdropLogout();
+  }
+
+}
+
+/**
+ * Test case with the test_module module enabled.
+ */
+class TestModuleEnabled extends TestModuleBaseWebTestCase {
+  /**
+   * Enable modules and create users with specific permissions.
+   */
+  public function setUp() {
+    // Add modules not enabled in a standard backdrop install.
+    parent::setUp('test_module');
+
+    // Create users.
+    $this->authenticatedUser = $this->backdropCreateUser(array());
+    $this->administratorUser = $this->backdropCreateUser(array('access administration pages'));
+  }
+
+  /**
+   * Test page access for various users when test_module is turned off.
+   */
+  public function testPageAccessOff() {
+    // Anonymous user page access.
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(200);
+
+    // Authenticated user page access.
+    $this->backdropLogin($this->authenticatedUser);
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(200);
+    $this->backdropLogout();
+
+    // Administrator user page access.
+    $this->backdropLogin($this->administratorUser);
+    $this->backdropGet(self::PAGE_PATH);
+    $this->assertResponse(200);
+    $this->backdropLogout();
+  }
+}

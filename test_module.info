@@ -1,0 +1,5 @@
+name = Test Module
+description = Minimal module for testing and prototyping.
+package = Development
+backdrop = 1.x
+type = module
